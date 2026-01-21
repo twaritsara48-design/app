@@ -1,0 +1,49 @@
+name: recycle_app
+description: แอปพลิเคชันให้ความรู้เรื่องขยะรีไซเคิล ขยะคืนชีพ
+publish_to: 'none' 
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ไอคอนมาตรฐานของ iOS
+  cupertino_icons: ^1.0.6
+
+  # --- แพ็กเกจที่เพิ่มเข้ามา ---
+  # สำหรับเล่นวิดีโอ YouTube
+  youtube_player_iframe: ^5.0.0
+  
+  # สำหรับเปิดลิงก์ภายนอก
+  url_launcher: ^6.2.4
+  
+  # สำหรับเรียกใช้ฟอนต์สวยๆ จาก Google (เช่น Kanit)
+  google_fonts: ^6.1.0
+  flutter_launcher_icons: ^0.13.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  # --- ส่วนจัดการรูปภาพ ---
+  # สำคัญมาก: ต้องสร้างโฟลเดอร์ assets/images ไว้ในโปรเจ็กต์จริงด้วย
+  assets:
+   - assets/images/
+  
+  # หากคุณต้องการใช้ฟอนต์แบบโหลดไฟล์มาใส่เอง (ถ้าใช้ google_fonts ไม่ต้องตั้งตรงนี้ก็ได้)
+  # fonts:
+  #   - family: Kanit
+  #     fonts:
+  #       - asset: assets/fonts/Kanit-Regular.ttf
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/ปกแอพ (1).jpg" # 👈 ระบุตำแหน่งรูปของคุณตรงนี้
+  min_sdk_android: 21
