@@ -16,6 +16,8 @@ dependencies:
   # --- แพ็กเกจที่เพิ่มเข้ามา ---
   # สำหรับเล่นวิดีโอ YouTube
   youtube_player_iframe: ^5.0.0
+  # สำหรับเล่นวิดีโอจากไฟล์
+  video_player: ^2.10.1
   
   # สำหรับเปิดลิงก์ภายนอก
   url_launcher: ^6.2.4
@@ -36,7 +38,7 @@ flutter:
   # สำคัญมาก: ต้องสร้างโฟลเดอร์ assets/images ไว้ในโปรเจ็กต์จริงด้วย
   assets:
    - assets/images/
-  
+
   # หากคุณต้องการใช้ฟอนต์แบบโหลดไฟล์มาใส่เอง (ถ้าใช้ google_fonts ไม่ต้องตั้งตรงนี้ก็ได้)
   # fonts:
   #   - family: Kanit
@@ -45,5 +47,5 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/logo.jpg" # 👈 ระบุตำแหน่งรูปของคุณตรงนี้
+  image_path: "assets/images/logo2.jpg" # 👈 ระบุตำแหน่งรูปของคุณตรงนี้
   min_sdk_android: 21
