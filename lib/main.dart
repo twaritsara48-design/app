@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const MyApp());
@@ -74,7 +75,7 @@ class HomePage extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/bg_main.jpg"),
+            image: AssetImage("assets/images/Recycle1.jpg"),
             fit: BoxFit.cover,
             opacity: 0.1,
           ),
@@ -1586,7 +1587,7 @@ class AuthorPage extends StatelessWidget {
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20)),
                   image: const DecorationImage(
-                      image: AssetImage("assets/images/bg_main.jpg"),
+                      image: AssetImage("assets/images/Recycle1.jpg"),
                       fit: BoxFit.cover,
                       opacity: 0.5),
                   color: Colors.green[100],
@@ -1778,70 +1779,79 @@ class WasteSearchDelegate extends SearchDelegate {
 // ==========================================
 // ส่วนสำคัญ: Custom Video Player (ฉบับอัปเกรด ใช้ Iframe เสถียร 100%)
 // ==========================================
-class MyVideoPlayer extends StatefulWidget {
+class MyVideoPlayer extends StatelessWidget {
   final String? youtubeId;
   const MyVideoPlayer({super.key, this.youtubeId});
 
-  @override
-  State<MyVideoPlayer> createState() => _MyVideoPlayerState();
-}
-
-class _MyVideoPlayerState extends State<MyVideoPlayer> {
-  late YoutubePlayerController _controller;
-  bool _isInvalid = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // ตรวจสอบ ID
-    if (widget.youtubeId == null || widget.youtubeId!.isEmpty) {
-      _isInvalid = true;
-      return;
+  Future<void> _launchUrl() async {
+    if (youtubeId == null) return;
+    final Uri url = Uri.parse('https://www.youtube.com/watch?v=$youtubeId');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
     }
-
-    // ตั้งค่า Controller ของไลบรารีใหม่
-    _controller = YoutubePlayerController.fromVideoId(
-      videoId: widget.youtubeId!,
-      autoPlay: false,
-      params: const YoutubePlayerParams(
-        showControls: true,
-        showFullscreenButton: true,
-        strictRelatedVideos: true,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    // ปิด Controller เมื่อไม่อยู่หน้านี้ (ป้องกันเสียงแทรก)
-    if (!_isInvalid) {
-      _controller.close();
-    }
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isInvalid) {
+    if (youtubeId == null || youtubeId!.isEmpty) {
       return Container(
         height: 200,
-        decoration: BoxDecoration(
-          color: Colors.grey[900],
-          borderRadius: BorderRadius.circular(10),
-        ),
+        color: Colors.grey[900],
         child: const Center(
-          child: Text("วิดีโอไม่พร้อมใช้งาน",
-              style: TextStyle(color: Colors.white)),
+          child: Icon(Icons.error, color: Colors.white),
         ),
       );
     }
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: YoutubePlayer(
-        controller: _controller,
-        aspectRatio: 16 / 9,
+    return GestureDetector(
+      onTap: _launchUrl,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // ภาพปกคลิป (Thumbnail)
+          Container(
+            height: 200,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              image: DecorationImage(
+                image: NetworkImage(
+                    'https://img.youtube.com/vi/$youtubeId/hqdefault.jpg'),
+                fit: BoxFit.cover,
+                onError: (exception, stackTrace) {},
+              ),
+            ),
+          ),
+          // ปุ่ม Play
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.red.withOpacity(0.9),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.play_arrow,
+              color: Colors.white,
+              size: 40,
+            ),
+          ),
+          // ข้อความแนะนำ
+          Positioned(
+            bottom: 10,
+            right: 15,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.7),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: const Text(
+                "แตะเพื่อรับชม",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

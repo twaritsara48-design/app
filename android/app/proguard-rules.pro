@@ -1,0 +1,2 @@
+-keep class com.pierfrancescosoffritti.androidyoutubeplayer.** { *; }
+-keep class androidx.appcompat.** { *; }
